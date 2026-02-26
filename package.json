@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "npx ts-node-dev --respawn --transpile-only src/server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "lint": "eslint 'src/**/*.ts' --fix",
+    "format": "prettier --write 'src/**/*.ts'"
   },
   "repository": {
     "type": "git",
@@ -13,19 +17,31 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/jcobby/artisan_API/issues"
   },
   "homepage": "https://github.com/jcobby/artisan_API#readme",
   "dependencies": {
-    "@prisma/client": "^7.4.0",
-    "express": "^5.2.1"
+    "@prisma/adapter-pg": "^7.4.1",
+    "@prisma/client": "^7.4.1",
+    "@supabase/supabase-js": "^2.97.0",
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.0.2",
+    "nodemon": "^3.1.14",
+    "pg": "^8.19.0",
+    "supabase-js": "^0.0.1-security"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
-    "@types/node": "^25.2.3",
-    "prisma": "^7.4.0",
+    "@types/node": "^25.3.1",
+    "@types/pg": "^8.16.0",
+    "prisma": "^7.4.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
