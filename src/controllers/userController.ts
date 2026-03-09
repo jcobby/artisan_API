@@ -5,34 +5,6 @@ import { prisma } from "../lib/prisma";
 import bcrypt from 'bcrypt';
 const SALT_ROUNDS = 10;
 
-export const getAllUsers = async (req: Request, res: Response) => {
-    try {
-        const users = await prisma.user.findMany()
-        res.status(200).json(users);
-    } catch (error: any) {
-        res.status(500).send('An error occurred while fetching users');
-        return;
-    }
-}
-
-export const getArtisans = async (req: Request, res: Response) => {
-}
-
-export const getUserById = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    try {
-        const user = await prisma.user.findUnique({ id })
-        if (!user) {
-            res.status(404).send('User not found');
-            return;
-        }
-        res.status(200).json(user);
-    } catch (error: any) {
-        res.status(400).send('Invalid user ID');
-        return;
-    }
-}
-
 export const registerUser = async (req: Request, res: Response) => {
     const { name, email, password, phone } = req.body;
     if (!name || !email || !password || !phone) {
@@ -52,14 +24,11 @@ export const registerUser = async (req: Request, res: Response) => {
                 phone,
                 role: "CLIENT",
                 password: hashedPassword,
-                updatedAt: new Date() // Added updatedAt field
+                updatedAt: new Date() 
             }
         })
         res.status(201).json(prismaUser);
     } catch (error: any) {
-        console.log('====================================');
-        console.log(error);
-        console.log('====================================');
         res.status(500).send('An error occurred while creating the user');
         return;
     }
@@ -112,6 +81,34 @@ export const logoutUser = async (req: Request, res: Response) => {
     } catch (error: any) {
         console.error(error);
         res.status(500).send('An error occurred while logging out');
+        return;
+    }
+}
+
+export const getAllUsers = async (req: Request, res: Response) => {
+    try {
+        const users = await prisma.user.findMany()
+        res.status(200).json(users);
+    } catch (error: any) {
+        res.status(500).send('An error occurred while fetching users');
+        return;
+    }
+}
+
+export const getArtisans = async (req: Request, res: Response) => {
+}
+
+export const getUserById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const user = await prisma.user.findUnique({ id })
+        if (!user) {
+            res.status(404).send('User not found');
+            return;
+        }
+        res.status(200).json(user);
+    } catch (error: any) {
+        res.status(400).send('Invalid user ID');
         return;
     }
 }

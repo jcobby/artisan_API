@@ -34,13 +34,16 @@
     "multer": "^2.0.2",
     "nodemon": "^3.1.14",
     "pg": "^8.19.0",
-    "supabase-js": "^0.0.1-security"
+    "supabase-js": "^0.0.1-security",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/node": "^25.3.1",
     "@types/pg": "^8.16.0",
+    "@types/swagger-ui-express": "^4.1.8",
     "prisma": "^7.4.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
