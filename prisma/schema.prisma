@@ -18,6 +18,10 @@ model ArtisanProfile {
   createdAt  DateTime @default(now())
   updatedAt  DateTime
   User       User     @relation(fields: [userId], references: [id])
+
+  @@index([profession])
+  @@index([location])
+  @@index([rating])
 }
 
 model ChatRoom {
