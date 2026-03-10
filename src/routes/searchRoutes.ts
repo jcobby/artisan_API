@@ -3,7 +3,7 @@ import express from "express";
 import { searchArtisans } from "../controllers/searchController";
 const router = express.Router();
 
-router.get('/artisans/search', searchArtisans)
+router.get('/artisans', searchArtisans)
 
 router.get('/artisans/search/:query', (req:Request, res:Response) => {
 
