@@ -2,66 +2,104 @@ import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 
 export const searchArtisans = async (req: Request, res: Response) => {
-  try {
-    const { profession, location, rating, page = "1", limit = "10", sort = "rating" } = req.query;
-    const pageNumber = Number(page);
-    const limitNumber = Number(limit);
-    const filters: any = {};
+    try {
+        const { profession, location, rating, page = "1", limit = "10", sort = "rating" } = req.query;
+        const pageNumber = Number(page);
+        const limitNumber = Number(limit);
+        const filters: any = {};
 
-    if (profession) {
-      filters.profession = {
-        contains: String(profession),
-        mode: "insensitive"
-      };
-    }
-
-    if (location) {
-      filters.location = {
-        contains: String(location),
-        mode: "insensitive"
-      };
-    }
-
-    if (rating) {
-      filters.rating = {
-        gte: Number(rating)
-      };
-    }
-
-    const artisans = await prisma.artisanProfile.findMany({
-      where: filters,
-      include: {
-        User: {
-          select: {
-            id: true,
-            name: true,
-            phone: true
-          }
+        if (profession) {
+            filters.profession = {
+                contains: String(profession),
+                mode: "insensitive"
+            };
         }
-      },
-      orderBy: {
-        [String(sort)]: "desc"
-      },
-      skip: (pageNumber - 1) * limitNumber,
-      take: limitNumber
-    });
 
-    const total = await prisma.artisanProfile.count({
-      where: filters
-    });
+        if (location) {
+            filters.location = {
+                contains: String(location),
+                mode: "insensitive"
+            };
+        }
 
-    res.status(200).json({
-      success: true,
-      page: pageNumber,
-      limit: limitNumber,
-      total,
-      data: artisans
-    });
+        if (rating) {
+            filters.rating = {
+                gte: Number(rating)
+            };
+        }
 
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to search artisans"
-    });
-  }
+        const artisans = await prisma.artisanProfile.findMany({
+            where: filters,
+            include: {
+                User: {
+                    select: {
+                        id: true,
+                        name: true,
+                        phone: true
+                    }
+                }
+            },
+            orderBy: {
+                [String(sort)]: "desc"
+            },
+            skip: (pageNumber - 1) * limitNumber,
+            take: limitNumber
+        });
+
+        const total = await prisma.artisanProfile.count({
+            where: filters
+        });
+
+        res.status(200).json({
+            success: true,
+            page: pageNumber,
+            limit: limitNumber,
+            total,
+            data: artisans
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Failed to search artisans"
+        });
+    }
 };
+
+// get artisan profile details by id with user details
+export const getArtisanById = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id as string;
+
+        const artisan = await prisma.artisanProfile.findUnique({
+            where: {
+                id: id
+            },
+            include: {
+                User: {
+                    select: {
+                        id: true,
+                        name: true,
+                        phone: true,
+                        email: true
+                    }
+                }
+            }
+        });
+        if (!artisan) {
+            return res.status(404).json({
+                success: false,
+                message: "Artisan not found"
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: artisan
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Failed to retrieve artisan profile"
+        });
+    }
+}
