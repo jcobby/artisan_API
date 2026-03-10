@@ -1,5 +1,5 @@
 import express from 'express';
-import { getArtisans, loginUser, registerUser } from '../controllers/userController';
+import { getArtisans, loginUser, registerUser, verifyOtp } from '../controllers/userController';
 const { Router } = express;
 
 const router = Router();
@@ -9,6 +9,7 @@ router.get("/artisans", getArtisans)
 
 router.post('/register', registerUser)
 router.post('/login', loginUser)
+router.post('/verify-otp', verifyOtp)
 
 router.get('/users/:id', (req, res) => {
     res.send(`Get user with id ${req.params.id}`);
